@@ -1,0 +1,40 @@
+### Create employee
+POST http://localhost:8080/employees
+Content-Type: application/json
+
+{
+  "firstName": "Jan",
+  "lastName": "Kowalski",
+  "dateOfBirth": "1990-05-15",
+  "gender": "MALE",
+  "socialSecurityNumber": "123-45-6789"
+}
+
+### Get employee by id (podmień {id} na wartość z odpowiedzi powyżej)
+GET http://localhost:8080/employees/fa668b14-33d1-4983-9716-6bc33910db31
+
+### List employees
+GET http://localhost:8080/employees
+
+### Duplicate SSN - powinno zwrócić 409
+POST http://localhost:8080/employees
+Content-Type: application/json
+
+{
+  "firstName": "Anna",
+  "lastName": "Nowak",
+  "dateOfBirth": "1985-03-20",
+  "gender": "FEMALE",
+  "socialSecurityNumber": "123-45-6789"
+}
+
+### Invalid input - brak wymaganych pól, powinno zwrócić 400
+POST http://localhost:8080/employees
+Content-Type: application/json
+
+{
+  "firstName": ""
+}
+
+### Not found - losowe UUID, powinno zwrócić 404
+GET http://localhost:8080/employees/00000000-0000-0000-0000-000000000000

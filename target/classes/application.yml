@@ -1,0 +1,35 @@
+spring:
+  application:
+    name: employee-data-service
+
+  datasource:
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/employees}
+    username: ${DB_USER:employees_app}
+    password: ${DB_PASSWORD:employees_app_password}
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      # 'validate' in real prod (with a migration tool like Flyway/Liquibase).
+      # Using 'update' here to keep the take-home setup simple and self-contained.
+      ddl-auto: update
+    open-in-view: false
+    properties:
+      hibernate:
+        format_sql: true
+
+  jackson:
+    default-property-inclusion: non_null
+
+server:
+  port: ${SERVER_PORT:8080}
+
+# Secret key used to key the HMAC-SHA256 used to hash SSNs before persisting them.
+# MUST be overridden via env var in any real deployment; never commit real secrets.
+app:
+  ssn:
+    hmac-secret: ${SSN_HMAC_SECRET:change-me-local-dev-secret-please-override}
+
+logging:
+  level:
+    com.example.employeeservice: INFO

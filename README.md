@@ -25,8 +25,7 @@ A backend microservice for managing employee records, built with Spring Boot. Th
    ```bash
    docker-compose down -v --rmi all
    ```
-
-The -v flag removes the attached volumes (so the database 'forgets' its data), while --rmi all takes care of deleting the downloaded images. If you'd rather keep the image on your drive for future use, just leave out the --rmi all part.
+   The -v flag removes the attached volumes (so the database 'forgets' its data), while --rmi all takes care of deleting the downloaded images. If you'd rather keep the image on your drive for future use, just leave out the --rmi all part.
 
 
 ## 💻 How to Work with the API

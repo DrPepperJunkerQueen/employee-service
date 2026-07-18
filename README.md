@@ -65,7 +65,7 @@ Run the test suite using:
 - **Sensitive Data Handling (Hashing vs. Encryption):** 🔐
   - **Approach:** SSNs are hashed using a one-way **HMAC-SHA256** with a server-side secret key before being persisted. The raw SSN is never stored, logged, or returned.
   - **Why Hashing:** The system only needs to know "Does this SSN already exist?", not "What is the SSN?". One-way hashing fits perfectly for equality checks.
-  - **Why HMAC-SHA256 over plain SHA-256:** SSNs have a small, predictable value space (~10^9 possibilities). A plain hash is vulnerable to precomputed rainbow tables/brute force. Keying the hash with a server secret defeats this.
+  - **Why HMAC-SHA256 over plain SHA-256:** SSNs have a small, predictable value space (~10^9 possibilities). A plain hash is vulnerable to precomputed rainbow tables and brute-force attacks. Keying the hash with a server secret defeats this.
   - **Why not AES Encryption:** Reversibility is a liability. If a database and encryption key are compromised, all SSNs are exposed. Since this service never needs to output the real SSN, we eliminate that risk entirely.
   - **Why not BCrypt/Argon2:** Password hashers generate a random salt per record. This would make checking for duplicates an O(N) operation (fetching all records to compare). A deterministic keyed HMAC allows the database to enforce uniqueness directly via a unique index constraint.
 
@@ -79,5 +79,5 @@ Run the test suite using:
 ## 🤖 AI Tool Usage
 
 - **Tools Used:** Claude and Gemini.
-- **What they were used for:** I used **Claude** to generate the initial source files and boilerplate code. Afterward, I manually assembled the generated code into a cohesive, working Spring Boot project and independently verified that the logic strictly complied with all requirements from the assignment PDF. Finally, I used **Gemini** to double-check my compliance verification and to generate this `README.md` file according to my specific instructions.
+- **What they were used for:** I used **Claude** to generate the initial source files and boilerplate code. Afterward, I manually assembled the generated code into a cohesive, working Spring Boot project and independently verified that the logic strictly complied with all requirements in the assignment PDF, including fixing any shortcomings in the generated code. Finally, I used **Gemini** to double-check my compliance verification and to generate this `README.md` file according to my specific instructions.
 - **Changed/Rejected Suggestion:** 🛑 During the initial logic generation, Claude suggested using **BCrypt** for storing the SSNs. I actively rejected this approach. While BCrypt is an industry standard for passwords, its random per-record salt makes it impossible to enforce database-level uniqueness via an index. I opted for a deterministic HMAC-SHA256 approach instead, ensuring O(1) duplicate checks via the DB unique constraint while still preventing brute-force attacks via the server-side secret.

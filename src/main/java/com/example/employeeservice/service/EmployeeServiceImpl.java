@@ -7,7 +7,6 @@ import com.example.employeeservice.exception.EmployeeNotFoundException;
 import com.example.employeeservice.model.Employee;
 import com.example.employeeservice.repository.EmployeeRepository;
 import com.example.employeeservice.security.SsnHashService;
-import com.example.employeeservice.service.EmployeeService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;

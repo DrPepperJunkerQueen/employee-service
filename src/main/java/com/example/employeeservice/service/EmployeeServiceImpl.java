@@ -1,4 +1,4 @@
-package com.example.employeeservice.service.impl;
+package com.example.employeeservice.service;
 
 import com.example.employeeservice.dto.EmployeeCreateRequest;
 import com.example.employeeservice.dto.EmployeeResponse;

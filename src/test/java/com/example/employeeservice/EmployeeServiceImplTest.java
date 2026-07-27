@@ -1,4 +1,4 @@
-package com.example.employeeservice.service;
+package com.example.employeeservice;
 
 import com.example.employeeservice.dto.EmployeeCreateRequest;
 import com.example.employeeservice.dto.EmployeeResponse;
@@ -8,7 +8,7 @@ import com.example.employeeservice.model.Employee;
 import com.example.employeeservice.model.Gender;
 import com.example.employeeservice.repository.EmployeeRepository;
 import com.example.employeeservice.security.SsnHashService;
-import com.example.employeeservice.service.impl.EmployeeServiceImpl;
+import com.example.employeeservice.service.EmployeeServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

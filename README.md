@@ -11,34 +11,36 @@ A backend microservice for managing employee records, built with Spring Boot. Th
 
 1. **Start the database:** 🗄️
 The project uses PostgreSQL for local execution. Start it using Docker Compose:
-```bash
-docker-compose up -d
-```
+   ```bash
+   docker-compose up -d
+   ```
 
 2. **Run the application:** ▶️
-* **Linux/macOS:**
-```bash
-./mvnw spring-boot:run
-```
+   * **Linux/macOS:**
+   ```bash
+   ./mvnw spring-boot:run
+   ```
 
 
-* **Windows:**
-```powershell
-.\mvnw.cmd spring-boot:run
-```
+   * **Windows:**
+   ```powershell
+   .\mvnw.cmd spring-boot:run
+   ```
 
 
 
 
-The service will start on `http://localhost:8080`.
+   The service will start on `http://localhost:8080`.
+
+
 3. **Stop and clean up:** 🧹
    When you are done, you can stop the database container and remove the associated networks, volumes, and images by running:
-```bash
-docker-compose down -v --rmi all
-```
+   ```bash
+   docker-compose down -v --rmi all
+   ```
 
 
-The `-v` flag removes the attached volumes (so the database 'forgets' its data), while `--rmi all` takes care of deleting the downloaded images. If you'd rather keep the image on your drive for future use, just leave out the `--rmi all` part.
+   The `-v` flag removes the attached volumes (so the database 'forgets' its data), while `--rmi all` takes care of deleting the downloaded images. If you'd rather keep the image on your drive for future use, just leave out the `--rmi all` part.
 
 ## 💻 How to Work with the API
 

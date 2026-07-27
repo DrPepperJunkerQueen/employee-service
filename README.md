@@ -4,35 +4,48 @@ A backend microservice for managing employee records, built with Spring Boot. Th
 
 ## 📋 Prerequisites
 - **Java 17** or higher ☕
-- **Maven** (or use the wrapper `./mvnw`) 🪶
+- **Maven** (or use the included wrapper) 🪶
 - **Docker** and **Docker Compose** (for the local database) 🐳
 
 ## 🚀 How to Run Locally
 
 1. **Start the database:** 🗄️
-   The project uses PostgreSQL for local execution. Start it using Docker Compose:
-   ```bash
-   docker-compose up -d
-   ```
-2. **Run the application:** ▶️
-   ```bash
-   ./mvnw spring-boot:run
-   ```
-   The service will start on `http://localhost:8080`.
+The project uses PostgreSQL for local execution. Start it using Docker Compose:
+```bash
+docker-compose up -d
+```
 
+2. **Run the application:** ▶️
+* **Linux/macOS:**
+```bash
+./mvnw spring-boot:run
+```
+
+
+* **Windows:**
+```powershell
+.\mvnw.cmd spring-boot:run
+```
+
+
+
+
+The service will start on `http://localhost:8080`.
 3. **Stop and clean up:** 🧹
    When you are done, you can stop the database container and remove the associated networks, volumes, and images by running:
-   ```bash
-   docker-compose down -v --rmi all
-   ```
-   The -v flag removes the attached volumes (so the database 'forgets' its data), while --rmi all takes care of deleting the downloaded images. If you'd rather keep the image on your drive for future use, just leave out the --rmi all part.
+```bash
+docker-compose down -v --rmi all
+```
 
+
+The `-v` flag removes the attached volumes (so the database 'forgets' its data), while `--rmi all` takes care of deleting the downloaded images. If you'd rather keep the image on your drive for future use, just leave out the `--rmi all` part.
 
 ## 💻 How to Work with the API
 
 You can use the provided `requests.http` file in your IDE to interact with the API, or use `curl`:
 
 **Create an Employee:** ➕
+
 ```bash
 curl -X POST http://localhost:8080/employees \
   -H "Content-Type: application/json" \
@@ -46,6 +59,7 @@ curl -X POST http://localhost:8080/employees \
 ```
 
 **List Employees:** 📃
+
 ```bash
 curl http://localhost:8080/employees?page=0&size=20
 ```
@@ -54,20 +68,32 @@ curl http://localhost:8080/employees?page=0&size=20
 
 The application uses an in-memory H2 database for testing, so no external infrastructure is required.
 Run the test suite using:
+
+* **Linux/macOS:**
 ```bash
 ./mvnw test
 ```
 
+
+* **Windows:**
+```powershell
+.\mvnw.cmd test
+```
+
+
+
 ## 🛠️ Technology Choices & Rationale
 
-- **Framework:** Spring Boot 3.3.4 & Java 17. Chosen for rapid development, robust validation (JSR-380), and excellent ecosystem support.
-- **Database:** PostgreSQL (via Docker) for local/prod simulation, H2 for isolated, fast unit/integration testing.
-- **Sensitive Data Handling (Hashing vs. Encryption):** 🔐
-  - **Approach:** SSNs are hashed using a one-way **HMAC-SHA256** with a server-side secret key before being persisted. The raw SSN is never stored, logged, or returned.
-  - **Why Hashing:** The system only needs to know "Does this SSN already exist?", not "What is the SSN?". One-way hashing fits perfectly for equality checks.
-  - **Why HMAC-SHA256 over plain SHA-256:** SSNs have a small, predictable value space (~10^9 possibilities). A plain hash is vulnerable to precomputed rainbow tables and brute-force attacks. Keying the hash with a server secret defeats this.
-  - **Why not AES Encryption:** Reversibility is a liability. If a database and encryption key are compromised, all SSNs are exposed. Since this service never needs to output the real SSN, we eliminate that risk entirely.
-  - **Why not BCrypt/Argon2:** Password hashers generate a random salt per record. This would make checking for duplicates an O(N) operation (fetching all records to compare). A deterministic keyed HMAC allows the database to enforce uniqueness directly via a unique index constraint.
+* **Framework:** Spring Boot 3.3.4 & Java 17. Chosen for rapid development, robust validation (JSR-380), and excellent ecosystem support.
+* **Database:** PostgreSQL (via Docker) for local/prod simulation, H2 for isolated, fast unit/integration testing.
+* **Sensitive Data Handling (Hashing vs. Encryption):** 🔐
+* **Approach:** SSNs are hashed using a one-way **HMAC-SHA256** with a server-side secret key before being persisted. The raw SSN is never stored, logged, or returned.
+* **Why Hashing:** The system only needs to know "Does this SSN already exist?", not "What is the SSN?". One-way hashing fits perfectly for equality checks.
+* **Why HMAC-SHA256 over plain SHA-256:** SSNs have a small, predictable value space (~10^9 possibilities). A plain hash is vulnerable to precomputed rainbow tables and brute-force attacks. Keying the hash with a server secret defeats this.
+* **Why not AES Encryption:** Reversibility is a liability. If a database and encryption key are compromised, all SSNs are exposed. Since this service never needs to output the real SSN, we eliminate that risk entirely.
+* **Why not BCrypt/Argon2:** Password hashers generate a random salt per record. This would make checking for duplicates an O(N) operation (fetching all records to compare). A deterministic keyed HMAC allows the database to enforce uniqueness directly via a unique index constraint.
+
+
 
 ## ⏳ What I'd Do Differently With More Time
 
@@ -78,7 +104,7 @@ Run the test suite using:
 
 ## 🤖 AI Tool Usage
 
-- **Tools Used:** Claude and Gemini.
-- **What They Were Used For:** I used **Claude** to generate the initial source files and boilerplate code. Afterward, I manually assembled the generated code into a cohesive, working Spring Boot project and independently verified that the logic strictly complied with all requirements in the assignment PDF, including fixing any shortcomings in the generated code. Finally, I used **Gemini** to double-check my compliance verification and to generate this `README.md` file according to my specific instructions.
-- **Significant Changed/Rejected Suggestion:** 🛑 During the initial logic generation, Claude suggested using **BCrypt** for storing the SSNs. I actively rejected this approach. While BCrypt is an industry standard for passwords, its random per-record salt makes it impossible to enforce database-level uniqueness via an index. I opted for a deterministic HMAC-SHA256 approach instead, ensuring O(1) duplicate checks via the DB unique constraint while still preventing brute-force attacks via the server-side secret.
-- **Rest Of The Changes:** ✨ Besides the previously mentioned encryption issue, most direct changes made by me were minuscule. For example, I added the "nonbinary" option to the enum representing gender, or made some "upgrades" to the README file like adding the instruction on how to stop the database container and remove the associated networks, or adding emojis to the text to make it easier for the user to find their way around. Of course, I also added this current section.
+* **Tools Used:** Claude and Gemini.
+* **What They Were Used For:** I used **Claude** to generate the initial source files and boilerplate code. Afterward, I manually assembled the generated code into a cohesive, working Spring Boot project and independently verified that the logic strictly complied with all requirements in the assignment PDF, including fixing any shortcomings in the generated code. Finally, I used **Gemini** to double-check my compliance verification and to generate this `README.md` file according to my specific instructions.
+* **Significant Changed/Rejected Suggestion:** 🛑 During the initial logic generation, Claude suggested using **BCrypt** for storing the SSNs. I actively rejected this approach. While BCrypt is an industry standard for passwords, its random per-record salt makes it impossible to enforce database-level uniqueness via an index. I opted for a deterministic HMAC-SHA256 approach instead, ensuring O(1) duplicate checks via the DB unique constraint while still preventing brute-force attacks via the server-side secret.
+* **Rest Of The Changes:** ✨ Besides the previously mentioned encryption issue, most direct changes made by me were minuscule. For example, I added the "nonbinary" option to the enum representing gender, or made some "upgrades" to the README file like adding the instruction on how to stop the database container and remove the associated networks, or adding emojis to the text to make it easier for the user to find their way around. I also manually added the Maven Wrapper files (`.mvn` folder, `mvnw`, and `mvnw.cmd`) to the project structure to ensure the service runs smoothly out of the box without requiring a global Maven installation. Of course, I also added this current section.
